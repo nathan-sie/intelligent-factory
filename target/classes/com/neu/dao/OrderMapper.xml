@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.OrderMapper">
+
+    <select id="queryAllOrder" resultType="com.neu.po.Order">
+        select * from order1
+        <where>
+            <if test="status!=null ">
+                and status = #{status}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="queryOrder" resultType="com.neu.po.Order">
+        select *
+        from order1
+        where receiver = #{receiver}
+
+    </select>
+
+    <select id="showOrder" resultType="com.neu.po.Order">
+        select o.*
+        from order1 o
+        where o.status = '1'
+
+    </select>
+
+    <select id="showOrder2" resultType="com.neu.po.Order">
+        select o.*
+        from order1 o
+        where o.status = '2' or o.status = '3' or o.status = '4'
+
+    </select>
+
+    <select id="queryOrderById" parameterType="Integer" resultType="order">
+        select * from order1 where id = #{id}
+    </select>
+
+    <insert id="addOrder" parameterType="order">
+        insert into order1 (pid,ono,num,ddl,deliver,receiver,status,mobile,address)
+        values (#{pid},#{ono},#{num},#{ddl},#{deliver},#{receiver},#{status},#{mobile},#{address})
+    </insert>
+
+    <update id="updateOrder" parameterType="order">
+        update order1
+        set pid = #{pid},
+            ono = #{ono},
+            num = #{num},
+            ddl = #{ddl},
+            deliver = #{deliver},
+            receiver = #{receiver},
+            status = #{status},
+            mobile = #{mobile},
+            address = #{address}
+    </update>
+
+    <delete id="deleteOrderByIds" parameterType="list">
+        delete from order1 where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="issueOrder" parameterType="list">
+        update order1 set status = '1' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="receiveOrder" parameterType="list">
+        update order1 set status = '5' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="chooseOrder" parameterType="list">
+        update order1 set status = '3' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="chooseOrder2" parameterType="list">
+        update order1 set status = '2' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="releaseOrder" parameterType="list">
+        update order1 set status = '4' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+</mapper>

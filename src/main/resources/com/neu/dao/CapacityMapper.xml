@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.CapacityMapper">
+
+<!--
+    <resultMap id="BaseResultMap" type="com.neu.po.Capacity">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <id column="did" jdbcType="INTEGER" property="did" />
+        <id column="pid" jdbcType="INTEGER" property="pid" />
+        <id column="capacity" jdbcType="INTEGER" property="capacity" />
+    </resultMap>
+
+    <resultMap id="queryAllCapacityMap" type="capacity" extends="BaseResultMap">
+        <association property="device" javaType="com.neu.po.Device">
+            <id column="id" property="id"></id>
+            <result property="name" column="dname"></result>
+        </association>
+    </resultMap>
+-->
+
+
+    <select id="queryAllCapacity" resultType="com.neu.po.Capacity" > <!--resultMap="queryAllCapacityMap"-->
+        select *
+        from capacity
+        where did = #{did}
+    </select>
+
+    <insert id="addCapacitySubmit" parameterType="capacity">
+        insert into capacity(did,pid,capacity)
+        values (#{did},#{pid},#{capacity})
+    </insert>
+
+    <select id="queryCapacityById" parameterType="Integer" resultType="capacity">
+        select * from capacity where id = #{id}
+    </select>
+
+    <update id="updateCapacitySubmit" parameterType="capacity">
+        update capacity
+        set did = #{did},
+            pid = #{pid},
+            capacity = #{capacity}
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteCapacityByIds" parameterType="list">
+        delete from capacity where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+
+
+</mapper>

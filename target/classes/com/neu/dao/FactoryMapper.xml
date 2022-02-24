@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.FactoryMapper">
+
+    <select id="queryAllFactory" resultType="com.neu.po.Factory">
+        select * from module_factory_tab
+        <where>
+            <if test="name!=null">
+                and name like '%${name}%'
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="queryFactory" resultType="com.neu.po.Factory">
+        select * from module_factory_tab
+        where uname = #{uname}
+    </select>
+
+
+
+
+    <select id="queryFactoryById" parameterType="Integer" resultType="factory">
+        select * from module_factory_tab where id = #{id}
+    </select>
+
+    <update id="openFactory" parameterType="list">
+        update module_factory_tab set status = '1' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="closeFactory" parameterType="list">
+        update module_factory_tab set status = '2' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+
+
+</mapper>

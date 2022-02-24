@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.ScheduleMapper">
+
+
+    <select id="queryAllSchedule" resultType="com.neu.po.Schedule">
+        select *
+        from schedule
+        where oid = #{oid}
+    </select>
+
+
+    <select id="queryScheduleById" parameterType="Integer" resultType="schedule">
+        select * from schedule where id = #{id}
+    </select>
+
+
+
+    <update id="updateScheduleSubmit" parameterType="schedule">
+        update schedule
+        set did = #{did},
+            oid = #{oid},
+            f_name = #{f_name},
+            `begin` = #{begin},
+            `end` = #{end}
+        where id = #{id}
+    </update>
+
+
+
+
+    <insert id="addScheduleSubmit" parameterType="schedule">
+     insert into schedule(oid,did,f_name,`begin`,`end`)
+     values (#{oid},#{did},#{f_name},#{begin},#{end})
+ </insert>
+
+    <delete id="deleteScheduleByIds" parameterType="list">
+        delete from schedule where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="produceOrder" parameterType="list">
+        set o.status = 3 from order1 o where o.id = {#oid}
+    </update>
+
+
+</mapper>

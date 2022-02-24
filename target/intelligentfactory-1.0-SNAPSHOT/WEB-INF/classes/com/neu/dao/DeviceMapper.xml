@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.DeviceMapper">
+
+    <resultMap id="BaseResultMap" type="com.neu.po.Device">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="tid" jdbcType="INTEGER" property="tid" />
+        <result column="f_name" jdbcType="VARCHAR" property="f_name" />
+        <result column="norms" jdbcType="VARCHAR" property="norms" />
+        <result column="dno" jdbcType="VARCHAR" property="dno" />
+        <result column="intro" jdbcType="VARCHAR" property="intro" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="rent" jdbcType="INTEGER" property="rent" />
+    </resultMap>
+
+   <resultMap id="queryAllDeviceMap" type="device" extends="BaseResultMap">
+       <association property="deviceType" javaType="com.neu.po.DeviceType">
+           <id column="id" property="id"></id>
+           <result property="name" column="typename"></result>
+       </association>
+   </resultMap>
+
+    <resultMap id="queryDeviceMap" type="device" extends="BaseResultMap">
+        <association property="deviceType" javaType="com.neu.po.DeviceType">
+            <id column="id" property="id"></id>
+            <result property="name" column="typename"></result>
+        </association>
+    </resultMap>
+
+    
+    
+    <select id="queryAllDevice" parameterType="device" resultMap="queryAllDeviceMap" >
+        select device.* ,type.name as typename
+        from module_device_tab device, module_device_type_tab type
+        where device.tid = type.id
+        <if test="name!=null">
+            and device.name like '%${name}%'
+        </if>
+        <if test="tid!=null">
+            and tid =#{tid}
+        </if>
+    </select>
+
+    <select id="queryDevice" parameterType="device" resultMap="queryDeviceMap">
+        select device.* ,type.name as typename
+        from module_device_tab device, module_device_type_tab type
+        where f_name = #{f_name} and device.tid = type.id
+        <if test="name!=null">
+            and device.name like '%${name}%'
+        </if>
+    </select>
+
+    <select id="queryRentDevice" parameterType="device" resultMap="queryAllDeviceMap">
+        select device.* ,type.name as typename
+        from module_device_tab device, module_device_type_tab type
+        where f_name = '产能中心' and device.tid = type.id and device.rent = '1'
+        <if test="name!=null">
+            and device.name like '%${name}%'
+        </if>
+    </select>
+
+    <select id="queryRentDevice2" parameterType="device" resultMap="queryAllDeviceMap">
+        select device.* ,type.name as typename
+        from module_device_tab device, module_device_type_tab type
+        where f_name = '产能中心' and device.tid = type.id and device.rent = '2'
+    </select>
+
+
+
+
+
+    <insert id="addDeviceSubmit" parameterType="device">
+        insert into module_device_tab(name,tid,f_name,norms,intro,dno,status,rent)
+         values (#{name},#{tid},#{f_name},#{norms},#{intro},#{dno},#{status},#{rent})
+    </insert>
+
+    <select id="queryDeviceById" parameterType="Integer" resultType="device">
+        select * from module_device_tab where id = #{id}
+    </select>
+
+    <update id="updateDeviceSubmit" parameterType="device">
+        update module_device_tab
+        set name = #{name} ,
+            tid = #{tid},
+            f_name = #{f_name},
+            norms = #{norms},
+            intro = #{intro},
+            dno = #{dno},
+            status = #{status},
+            rent = #{rent}
+        where id = #{id}
+    </update>
+
+
+
+
+
+    <delete id="deleteDeviceByIds" parameterType="list">
+        delete from module_device_tab where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="openDevice" parameterType="list">
+        update module_device_tab set status = '1' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="closeDevice" parameterType="list">
+        update module_device_tab set status = '3' where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="rentDevice" parameterType="list">
+        update module_device_tab set rent = '2'  where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+
+    </update>
+
+    <update id="rentDevice2" parameterType="list">
+        update module_device_tab set f_name = 'qqq'  where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+
+    </update>
+
+    <update id="backDevice" parameterType="list">
+        update module_device_tab set rent = '1'  where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+
+    </update>
+
+
+</mapper>

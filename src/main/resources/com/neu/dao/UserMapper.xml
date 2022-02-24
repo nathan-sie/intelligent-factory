@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.UserMapper">
+
+    <select id="queryAllUser" resultType="com.neu.po.User">
+        select * from frame_user_tab
+        <where>
+            <if test="name!=null">
+                and name like '%${name}%'
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="addUserSubmit" parameterType="user">
+        insert into frame_user_tab(username,password,name,mobile,rid,fname,intro)
+        values (#{username},#{password},#{name},#{mobile},#{rid},#{fname},#{intro})
+    </insert>
+
+    <insert id="addFactorySubmit" parameterType="user">
+        insert into module_factory_tab(`name`,`intro`,`lname`,`mobile`,`uname`,`status`)
+        values (#{fname},#{intro},#{username},#{mobile},#{name},'2')
+    </insert>
+
+    <select id="queryUserById" parameterType="Integer" resultType="user">
+        select * from frame_user_tab where id = #{id}
+    </select>
+
+    <update id="updateUserSubmit" parameterType="user">
+        update frame_user_tab
+        set username = #{username},
+            password = #{password},
+            name = #{name},
+            mobile = #{mobile},
+            rid = #{rid}
+         where id = #{id}
+    </update>
+
+    <delete id="deleteUserByIds" parameterType="list">
+        delete from frame_user_tab where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <select id="queryUserByNameAndPassword" resultType="com.neu.po.User">
+        select * from frame_user_tab where username=#{username} and password=#{password}
+    </select>
+
+
+</mapper>

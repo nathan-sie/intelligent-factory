@@ -1,0 +1,46 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": ""
+  },
+  "logoInfo": {
+    "title": "东软智能制造平台",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "订单管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "订单管理",
+          "href": "orderIndex2",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        }
+      ]
+    },
+
+
+    {
+      "title": "标书管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "标书管理",
+          "href": "bidIndex3",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        }
+      ]
+    }
+
+
+
+  ]
+}

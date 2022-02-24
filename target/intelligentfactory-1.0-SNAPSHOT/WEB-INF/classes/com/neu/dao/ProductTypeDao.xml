@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.ProductTypeDao">
+
+  <select id="queryAllProductType" resultType="com.neu.po.ProductType">
+    select * from module_product_type_tab
+    <where>
+      <if test="name!=null">
+        and name like '%${name}%'
+      </if>
+    </where>
+    order by id desc
+  </select>
+
+  <insert id="addProdudctTypeSubmit" parameterType="productType">
+    insert into module_product_type_tab(name) values (#{name})
+  </insert>
+
+  <select id="queryProductTypeById" parameterType="Integer" resultType="productType">
+    select * from module_product_type_tab where id = #{id}
+  </select>
+
+  <update id="updateProductTypeSubmit" parameterType="productType">
+    update module_product_type_tab set name = #{name} where id = #{id}
+  </update>
+
+  <delete id="deleteProductTypeByIds" parameterType="list">
+    delete from module_product_type_tab where id in
+    <foreach collection="list" item="ids" open="(" separator="," close=")">
+      #{ids}
+    </foreach>
+  </delete>
+
+
+</mapper>

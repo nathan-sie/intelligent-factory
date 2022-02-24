@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.BidMapper">
+
+
+
+    <resultMap id="BaseResultMap" type="com.neu.po.Bid">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="uname" jdbcType="VARCHAR" property="uname" />
+        <result column="oid" jdbcType="INTEGER" property="oid" />
+        <result column="f_name" jdbcType="VARCHAR" property="f_name" />
+        <result column="price" jdbcType="VARCHAR" property="price" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+    </resultMap>
+
+    <resultMap id="queryAllBidMap" type="bid" extends="BaseResultMap">
+        <association property="order" javaType="com.neu.po.Order">
+            <id column="id" property="id"></id>
+            <result property="ono" column="ono"></result>
+        </association>
+    </resultMap>
+
+    <resultMap id="queryBidMap" type="bid" extends="BaseResultMap">
+        <association property="order" javaType="com.neu.po.Order">
+            <id column="id" property="id"></id>
+            <result property="ono" column="ono"></result>
+        </association>
+    </resultMap>
+
+
+
+    <select id="queryAllBid" parameterType="bid" resultMap="queryAllBidMap" >
+        select b.*,o.ono from order1 o, bid b
+        where o.id = b.oid
+        <where>
+            <if test="status!=null ">
+                and status = #{status}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="queryBid" parameterType="bid" resultMap="queryBidMap">
+        select b.*,o.ono from order1 o, bid b
+        where o.id = b.oid and uname = #{uname}
+        order by id desc
+    </select>
+
+    <select id="queryBid2" parameterType="bid" resultMap="queryBidMap">
+        select b.*,o.ono from order1 o, bid b,frame_user_tab u
+        where o.id = b.oid and o.receiver = u.name and u.name = #{name}
+        order by id desc
+    </select>
+
+
+    <select id="queryBid3" parameterType="bid" resultMap="queryBidMap">
+        select * from bid
+        where oid = #{oid}
+
+    </select>
+
+
+    <insert id="addBid" parameterType="bid">
+        insert into bid(oid,f_name,price,status,uname)
+        values (#{oid},#{f_name},#{price},#{status},#{uname})
+    </insert>
+
+    <update id="chooseBid" parameterType="list">
+        update bid set status = '1'  where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="denyBid" parameterType="list">
+        update bid set status = '2'  where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="productBid" parameterType="list">
+        update bid set status = '3'  where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+
+    </update>
+
+<!--    <update id="takeOrder" parameterType="list">
+        update order1 set status = '2'  where id
+
+    </update>-->
+
+
+</mapper>

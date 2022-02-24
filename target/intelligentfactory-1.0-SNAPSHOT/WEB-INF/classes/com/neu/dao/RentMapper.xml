@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.dao.RentMapper">
+    <select id="queryAllRent" resultType="com.neu.po.Rent">
+        select * from rent
+        <where>
+            <if test="f_name!=null">
+                and f_name like '%${f_name}%'
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+
+
+    <insert id="addRentSubmit" parameterType="rent">
+        insert into rent(did,f_name,`begin`,`end`)
+        values (#{did},#{f_name},#{begin},#{end})
+    </insert>
+
+</mapper>
